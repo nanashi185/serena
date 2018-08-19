@@ -1,0 +1,43 @@
+{% extends "shop/base.html" %}
+{% load static %}
+
+{% block title %}
+	{% if category %}
+		{{ category.title }}
+	{% else %}
+		Products
+	{% endif %}
+{% endblock %}
+
+{% block content %}
+<br>
+	<div class="container" style="height: auto;">
+		<div class="w3-content  w3-padding-64" style="max-width:850px">
+			<div class="product-detail">
+				<div class="row"> 
+					<div class="column">
+						<div class="contain">
+							<img src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}" style="width: 100%;">
+						</div>
+					</div>
+					<div class="column">
+						<div class="contain">
+							<h1>{{ product.name }}</h1>
+							<h2><a href="{{ product.category.get_absolute_url }}">{{ product.category }}</a></h2>
+							<p class="price">PHP {{ product.price }}</p>
+							<form action="{% url 'cart:cart_add' product.id %}" method="post">
+							{{ cart_product_form }}
+							{% csrf_token %}
+							<input type="submit"class="w3-button w3-round-large w3-blue-grey" value="Place Order">
+							</form>
+							{{ product.description|linebreaks }}
+						</div>
+					</div>
+				</div>
+			</div>
+		<br>
+		<br>
+	
+		</div>
+	</div>
+{% endblock %}

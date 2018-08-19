@@ -1,0 +1,58 @@
+{% extends "shop/base.html" %}
+{% load static %}
+
+{% block title %}
+	{% if category %}
+		{{ category.name }}
+	{% else %}
+		Products
+	{% endif %}
+{% endblock %}
+
+{% block content %}
+
+		<div id="section2" class="container-fluid ">
+		<div class="w3-container" id="about">
+		<div class="w3-content  w3-padding-64" style="max-width:1300px">
+			<h5 class="w3-center"><span class="w3-tag w3-wide">MENU</span></h5>
+			<div class="tab py-5 bg-dark">
+				<!--<div id="sidebar" class="container-fluid ">-->
+		
+			<a  class="w3-button block"{% if not category %}{% endif %}
+				href="{% url 'shop:product_list' %}" style="text-decoration:none;"><big>All</big>
+			</a>
+			{% for c in categories %}
+				<div {% if category.slug == c.slug %} {% endif %}>
+					<a class="w3-button block" href="{{ c.get_absolute_url }}"style="text-decoration:none;"><big>{{ c.name }}</big></a>
+				</div>
+			{% endfor %}
+		
+	</div>
+		<div id="main" class="product-list">
+		<div class="scroll-contain scrollbar" id="style-2">
+			<div id="London" class="tabcontent">
+				<div class="upper"><h5>{% if category %}{{ category.name }}{% else %}All{% endif %}</h5></div>
+					<div class="row"> 
+						{% for product in products %}
+						<div class="column">
+							<div class="contain">
+									<a href="{{ product.get_absolute_url }}">
+										<img src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}"style="width:100%"alt="Avatar" class="image">
+									</a>
+									<div class="overlay">
+										<a href="{{ product.get_absolute_url }}" style="text-decoration:none; color:white">{{ product.name }}<br>
+										PHP {{ product.price }}</a>
+									</div>
+								</div>
+							</div>
+						{% endfor %}
+						
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+</div>
+{% endblock %}

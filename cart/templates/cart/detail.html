@@ -1,0 +1,66 @@
+{% extends "shop/base.html" %}
+{% load static %}
+{% block title %}Your shopping cart{% endblock %}
+
+{% block content %}
+
+<br>
+<br>
+<br>
+<div class="container">
+	<h5 class="w3-center"><span class="w3-tag w3-wide">YOUR ORDER</span></h5>
+	<div class="table-responsive">
+	<table class="table">
+		<thead class="thead-light">
+			<tr><strong>
+				<th>Image</th>
+				<th>Product</th>
+				<th>Quantity</th>
+				<th>Remove</th>
+				<th>Unit price</th>
+				<th>Price</th>
+			</strong>
+			</tr>
+		</thead>
+		<tbody>
+			{% for item in cart %}
+				{% with product=item.product %}
+					<tr>
+						<td>
+							<a href="{{ product.get_absolute_url }}">
+								<img src="{% if product.image %}{{ product.image.url}}{% else %}{% static 'img/no_image.png' %}{% endif %}"style="width:75%"alt="Avatar" class="image">
+							</a>
+						
+						</td>
+						<td style="font-size:20px;">{{ product.name }}</td>
+						<td style="font-size:20px;">
+							<form "action="{% url 'cart:cart_add' product.id %}" method="post">
+								{{ item.update_quantity_form.quantity }}
+								{{ item.update_quantity_form.update }}
+								<input  " class="w3-button w3-round-large w3-blue-grey" type="submit" value="Update">
+								{% csrf_token %}
+							</form>
+						</td>
+						<td>
+							<a class="fa fa-trash" style="text-decoration:none; color:red; font-size:25px;  padding-left: 20px;" href="{% url 'cart:cart_remove' product.id %}"> </a>
+						</td>
+						<td style="font-size:20px;text-align: left;" class="num">PHP {{ item.price }}</td>
+						<td style="font-size:20px;text-align: left;"class="num">PHP {{ item.total_price }}</td>
+					</tr>
+				{% endwith %}
+			{% endfor %}
+			<tr class="table-secondary">
+				<td style="font-size:20px;"><strong>Total</strong></td>
+				<td colspan="4"></td>
+				<td style="font-size:20px;text-align: left;" class="num"><strong>PHP {{ cart.get_total_price }}</strong></td>
+			</tr>
+		</tbody>
+	</table>
+	</div>
+
+	<p class="text-right">
+		<a class="w3-button w3-round-large w3-blue-grey"href="{% url 'shop:product_list' %}" class="button light"style="text-decoration:none;">Continue shopping</a>
+		<a class="w3-button w3-round-large w3-blue-grey"href="{% url 'orders:order_create' %}" class="button" style="text-decoration:none;">Checkout</a>
+	</p>
+</div>
+{% endblock %}
